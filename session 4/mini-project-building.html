@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Project Building</title>
+<style>
+  :root {
+    --blue: #0468D7;
+    --blue-deep: #02569B;
+    --blue-soft: #E5F0FC;
+    --sky: #54C5F8;
+    --dark: #1D1D1F;
+    --mid: #3A3A3C;
+    --muted: #6E6E73;
+    --light: #F5F5F7;
+    --border: #E5E5EA;
+    --code-bg: #1D1D1F;
+    --green: #28A745;
+    --red: #C0392B;
+    --amber: #B07D1A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--mid); background: #FFFFFF; line-height: 1.65; font-size: 16px;
+  }
+  .hero {
+    background: radial-gradient(ellipse 90% 130% at 92% 115%, rgba(84,197,248,0.38), rgba(4,104,215,0.10) 45%, transparent 70%),
+                radial-gradient(ellipse 60% 80% at 0% -20%, rgba(4,104,215,0.18), transparent 70%),
+                #10141C;
+    color: #fff; padding: 64px 24px 56px;
+  }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .hero .pill {
+    display: inline-block; border: 1.5px solid rgba(84,197,248,0.55); background: rgba(84,197,248,0.1);
+    color: var(--sky); font-weight: 700; font-size: 13px; letter-spacing: 2px;
+    padding: 8px 20px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .hero h1 { font-size: clamp(32px, 5.5vw, 52px); font-weight: 800; letter-spacing: -1px; color: #fff; }
+  .hero h1 .dt { color: var(--sky); }
+  .hero p.sub { color: #C7C7CC; font-size: 19px; margin-top: 12px; max-width: 700px; }
+  .hero p.meta { color: #8E8E93; font-size: 13.5px; letter-spacing: 1px; margin-top: 28px; text-transform: uppercase; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  section.chapter { padding-top: 40px; margin-top: 24px; }
+  section.chapter + section.chapter { border-top: 1px solid var(--border); }
+  h2.chap {
+    font-size: 26px; font-weight: 800; color: var(--dark); letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 14px; margin-bottom: 6px; flex-wrap: wrap;
+  }
+  h2.chap .num {
+    background: var(--blue); color: #fff; font-size: 14px; font-weight: 800;
+    min-width: 40px; height: 40px; border-radius: 10px; display: inline-flex;
+    align-items: center; justify-content: center; flex: 0 0 auto; padding: 0 12px;
+  }
+  h2.chap .num.hw { background: var(--dark); }
+  .dif { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 1px; }
+  h3 { color: var(--dark); font-size: 17px; font-weight: 700; margin: 22px 0 8px; }
+  p { margin: 10px 0; }
+  ul, ol { margin: 10px 0 10px 24px; }
+  li { margin: 6px 0; }
+  strong { color: var(--dark); }
+  code {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    background: var(--light); border: 1px solid var(--border); border-radius: 5px;
+    padding: 1.5px 6px; font-size: 87%; color: var(--dark);
+  }
+  a { color: var(--blue); font-weight: 600; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  pre.dart {
+    background: var(--code-bg); color: #E5E5EA; border-radius: 12px;
+    padding: 16px 20px; overflow-x: auto; font-size: 13.5px; line-height: 1.6;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; margin: 12px 0;
+  }
+  pre.dart .k { color: #FF7AB2; font-weight: 600; }
+  pre.dart .s { color: #FF8170; }
+  pre.dart .n { color: #D9C97C; }
+  pre.dart .t { color: #8DD3FF; }
+  pre.dart .c { color: #7F8C98; font-style: italic; }
+  .output {
+    background: var(--light); border: 1px solid var(--border); border-left: 4px solid var(--green);
+    border-radius: 0 10px 10px 0; padding: 10px 16px; margin: 8px 0 14px;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 13px; color: var(--mid);
+    white-space: pre-wrap;
+  }
+  .output::before { content: "✅ Expected"; display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; color: var(--green); margin-bottom: 4px; text-transform: uppercase; }
+  .box { border-radius: 14px; padding: 16px 20px; margin: 16px 0; }
+  .box .box-title { font-weight: 800; font-size: 12.5px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .box.idea { background: var(--blue-soft); border: 1px solid #C9DCF0; }
+  .box.idea .box-title { color: var(--blue-deep); }
+  .box.think { background: #FFF9EC; border: 1px solid #F5E3B8; }
+  .box.think .box-title { color: var(--amber); }
+  .box.check { background: #EFF8F0; border: 1px solid #BFE3C6; }
+  .box.check .box-title { color: #1E7B33; }
+  .box.push { background: var(--light); border: 1px dashed #C7C7CC; }
+  .box.push .box-title { color: var(--muted); }
+  .box.plain { background: var(--light); }
+  .box.plain .box-title { color: var(--dark); }
+  .box.stuck { background: #FDF0EF; border: 1px solid #F3C6BC; }
+  .box.stuck .box-title { color: var(--red); }
+  .story {
+    font-size: 15.5px; color: var(--mid); border-left: 3px solid var(--sky);
+    padding: 6px 16px; margin: 12px 0 16px; font-style: italic; background: #FAFCFF;
+  }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 14px; }
+  th { background: var(--dark); color: #fff; text-align: left; padding: 9px 13px; font-size: 12.5px; }
+  th:first-child { border-radius: 10px 0 0 0; } th:last-child { border-radius: 0 10px 0 0; }
+  td { border-bottom: 1px solid var(--border); padding: 8px 13px; vertical-align: top; }
+  tr:nth-child(even) td { background: #FAFAFC; }
+  .toc { background: var(--light); border-radius: 16px; padding: 26px 30px; margin: 36px 0; }
+  .toc h2 { font-size: 15px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .toc ol { columns: 2; column-gap: 40px; margin-left: 20px; }
+  .toc li { margin: 7px 0; break-inside: avoid; }
+  .toc a { color: var(--dark); font-weight: 600; }
+  .toc a:hover { color: var(--blue); }
+  .toc .mini { color: var(--blue); font-size: 12px; font-weight: 700; }
+  @media (max-width: 640px) { .toc ol { columns: 1; } }
+  .divider-label {
+    text-align: center; margin: 48px 0 8px; font-size: 13px; font-weight: 800;
+    letter-spacing: 3px; color: var(--blue); text-transform: uppercase;
+  }
+  footer { background: var(--dark); color: #98989D; text-align: center; padding: 30px 20px; font-size: 13px; }
+
+  .starter { background: #F0F6FF; border: 2px solid var(--blue); border-radius: 14px; padding: 16px 20px; margin: 16px 0 20px; }
+  .starter .box-title { font-weight: 800; font-size: 12.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue-deep); display: block; margin-bottom: 4px; }
+  .starter p { font-size: 15px; margin: 4px 0 8px; }
+  .rung { border-left: 3px solid var(--blue); padding: 2px 0 2px 18px; margin: 18px 0; }
+  .rung p.rt { margin: 0 0 8px; }
+  .see { background: #EFF8F0; border: 1px solid #BFE3C6; border-radius: 10px; padding: 8px 14px; margin: 8px 0;
+         font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 13px; color: var(--mid); }
+  .see::before { content: "👀 You should see"; display: block; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                 font-size: 10.5px; font-weight: 800; letter-spacing: 1px; color: #1E7B33; text-transform: uppercase; margin-bottom: 3px; }
+  details.hint { background: #FFF9EC; border: 1px solid #F5E3B8; border-radius: 10px; padding: 7px 14px; margin: 6px 0; }
+  details.hint summary { cursor: pointer; font-weight: 700; color: var(--amber); font-size: 14px; }
+  details.hint[open] summary { margin-bottom: 4px; }
+  details.hint p { margin: 4px 0 2px; font-size: 15px; }
+
+  .see.ui { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 15px; }
+  .box.turn { background: #F4F0FF; border: 1px solid #D9CEF7; }
+  .box.turn .box-title { color: #5B3FC4; }
+  .tree { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 13.5px; background: var(--light);
+          border-radius: 10px; padding: 12px 16px; white-space: pre; overflow-x: auto; color: var(--dark); margin: 10px 0; }
+  .step-lead { font-size: 16.5px; }
+  .see.with-shot { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+  .see.with-shot .see-text { flex: 1 1 260px; }
+  .see.with-shot::before { flex-basis: 100%; margin-bottom: -10px; }
+  .box.stuck img.phone { margin-top: 10px; }
+  .see .shots { display: flex; gap: 12px; flex-wrap: wrap; }
+  img.phone { width: 150px; border-radius: 14px; border: 1px solid #C9D8C6; display: block; }
+  .brief { background: var(--light); border-left: 5px solid var(--blue); border-radius: 0 16px 16px 0; padding: 22px 28px; margin: 36px 0; font-size: 17px; }
+
+  .proj { border: 1px solid var(--border); border-radius: 16px; padding: 4px 24px 18px; margin: 26px 0; }
+  .proj h3 { font-size: 21px; margin-top: 18px; }
+  .tag { display: inline-block; background: var(--blue-soft); color: var(--blue-deep); font-size: 12.5px; font-weight: 800;
+         letter-spacing: 1px; border-radius: 999px; padding: 3px 12px; margin-right: 6px; }
+  .screens { display: flex; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+  .screens div { flex: 1 1 200px; background: var(--light); border-radius: 12px; padding: 10px 14px; font-size: 15px; }
+  .screens strong { display: block; margin-bottom: 2px; }
+  ol.req li { margin: 7px 0; }
+</style>
+</head>
+<body>
+<div class="hero"><div class="hero-inner">
+<div class="pill">WEEK 2 · SESSION 4</div>
+<h1>Mini Project <span class="dt">Building</span></h1>
+<p class="sub">You built your first app with the Shopping List. Now build one on your own: six projects, each combining logic from your labs. This time the plan, the code and the design are yours.</p>
+<p class="meta">Mobile Programming · Innovation Center</p>
+</div></div>
+<div class="wrap">
+<div class="brief"><strong>This is the next step after the Shopping List.</strong> The Shopping List gave you the steps. Now you get only the goals. Pick one of six projects. Each one combines logic from two or three of your labs, the way real apps do, using the Flutter you used in the Shopping List plus a few new pieces explained below.
+This page tells you <strong>what</strong> your app must do. <strong>How</strong> to build it, and how it looks, is up to you.</div>
+<div class="box plain"><span class="box-title">How this works</span><ul>
+<li>Read the whole page first: the concepts, then the six projects. Then choose one.</li>
+<li>There are no steps, no hints and no project code. You have everything you need: your labs, your own Shopping List code, the guide, and the concepts below. When you wonder how to do something, ask yourself where you already did something like it.</li>
+<li>Read <strong>New pieces you will need</strong> carefully: it explains everything your project needs that the Shopping List did not, each with a small example.</li>
+<li>Every requirement is something your app must do. The <strong>Your app is done when</strong> list is how you check yourself.</li>
+<li>Your design is yours: the app name, colours, icons and layout. Two students with the same project should have apps that look different.</li>
+<li>Stuck? Read the error, then the Shopping List guide's <em>When something goes wrong</em>, then the docs (hover over a widget), then a friend.</li></ul></div>
+<div class="toc"><h2>On this page</h2><ol>
+<li><a href="#know">Everything you already know</a></li>
+<li><a href="#new">New pieces you will need</a></li>
+<li><a href="#all">Requirements for every project</a></li>
+<li><a href="#momo">MoMo Wallet</a></li>
+<li><a href="#vote">Class Election</a></li>
+<li><a href="#time">My Week</a></li>
+<li><a href="#battery">Battery Planner</a></li>
+<li><a href="#bus">Bus Booking</a></li>
+<li><a href="#own">Your own app</a></li>
+<li><a href="#submit">Submit</a></li></ol></div>
+<section class="chapter" id="know"><h2 class="chap"><span class="num">1</span> Everything you already know</h2>
+<p class="step-lead">You used all of these in the Shopping List. Every project needs them again. If one is not clear, look at your own Shopping List code before you start.</p>
+<table><tr><th>Concept</th><th>What it is for</th><th>Where you met it</th></tr><tr><td><strong>Widgets and the widget tree</strong></td><td>Everything on screen is a widget, and screens are widgets inside widgets.</td><td>Guide steps 1–3</td></tr><tr><td><strong><code>StatelessWidget</code> / <code>StatefulWidget</code></strong></td><td>A widget that never changes / a widget with data that changes, kept in its State.</td><td>Guide steps 3 and 5</td></tr><tr><td><strong><code>setState</code></strong></td><td>Change the data inside it, and Flutter redraws the screen from the new data.</td><td>Guide step 5</td></tr><tr><td><strong>Layout</strong></td><td><code>Scaffold</code>, <code>AppBar</code>, <code>Column</code>, <code>Row</code>, <code>Expanded</code>, <code>Padding</code>, <code>SizedBox</code>, <code>Center</code>.</td><td>Guide steps 2 and 6</td></tr><tr><td><strong>Lists</strong></td><td><code>ListView.builder</code> builds one row per item; <code>ListTile</code> is a ready-made row.</td><td>Guide step 4</td></tr><tr><td><strong>Input</strong></td><td><code>TextField</code> + <code>TextEditingController</code>: read with <code>.text</code>, empty with <code>.clear()</code>, free in <code>dispose</code>.</td><td>Guide step 6</td></tr><tr><td><strong>Refusing bad input</strong></td><td>Check first, show a <code>SnackBar</code>, and <code>return</code> early. Nothing changes.</td><td>Guide step 6, Lab 2</td></tr><tr><td><strong>Counting and searching in Dart</strong></td><td><code>for</code> loops, <code>if</code>, Maps with <code>?? 0</code>, <code>toLowerCase</code>, <code>contains</code>, <code>insert</code>, <code>removeAt</code>.</td><td>Labs 1–12</td></tr><tr><td><strong>Model classes</strong></td><td>A class that describes your data, separate from the widgets. Fields that change are not <code>final</code>.</td><td>Guide step 8</td></tr><tr><td><strong>Hot reload vs hot restart</strong></td><td>Reload keeps the data; restart starts over. Changed your model or your starting data? Hot restart.</td><td>Guide step 8</td></tr></table></section><section class="chapter" id="new"><h2 class="chap"><span class="num">2</span> New pieces you will need</h2><p class="step-lead">Everything your project needs that the Shopping List did not use. Each piece is explained on a small example from a contacts app, not from any project. Most projects need the first five; the others depend on which project you choose. Already did Shopping List+? The first five will be a recap.</p><div class="box idea"><span class="box-title">🧠 Showing a message instead of an empty screen</span><p>What goes on the screen can depend on the data. <code>condition ? a : b</code> works for whole widgets: a message when the list is empty, the list otherwise.</p><pre class="dart"><span class="t">Expanded</span>(
+  child: shown.isEmpty
+      ? <span class="k">const</span> <span class="t">Center</span>(child: <span class="t">Text</span>(<span class="s">&#x27;No contacts yet&#x27;</span>))
+      : <span class="t">ListView</span>.builder(
+          itemCount: shown.length,
+          itemBuilder: (context, index) {
+            <span class="k">final</span> contact = shown[index];
+            <span class="k">return</span> <span class="t">ListTile</span>(
+              title: <span class="t">Text</span>(contact.name),
+              onTap: () =&gt; open(contact),
+              onLongPress: () =&gt; deleteContact(contact),
+            );
+          },
+        ),
+)</pre></div><div class="box idea"><span class="box-title">🧠 Finding things in a list</span><p><code>where</code> gives every item that matches a test. <code>isNotEmpty</code> tells you if there was one, <code>first</code> gives you the first one, and <code>indexOf</code> tells you its position. Comparing in lower case makes <em>aline</em> and <em>Aline</em> the same.</p><pre class="dart"><span class="k">final</span> matches = contacts.where((c) =&gt; c.name.toLowerCase() == <span class="s">&#x27;aline&#x27;</span>);
+<span class="k">if</span> (matches.isNotEmpty) {
+  <span class="k">final</span> aline = matches.first;
+  <span class="k">final</span> position = contacts.indexOf(aline);
+  print(<span class="s">&#x27;Aline is at position $position&#x27;</span>);
+}</pre></div><div class="box idea"><span class="box-title">🧠 Filters</span><p>Never change your real list to filter it, or the hidden items are lost. Keep the chosen filter in your State, build a second list (<code>shown</code>) from the real one in <code>build</code>, and give <code>shown</code> to the ListView. <code>ChoiceChip</code>s let the user choose.</p><pre class="dart"><span class="k">String</span> filter = <span class="s">&#x27;All&#x27;</span>;</pre><pre class="dart"><span class="k">final</span> shown = filter == <span class="s">&#x27;Favourites&#x27;</span>
+    ? contacts.where((c) =&gt; c.favourite).toList()
+    : contacts;</pre><pre class="dart"><span class="t">ChoiceChip</span>(
+  label: <span class="k">const</span> <span class="t">Text</span>(<span class="s">&#x27;Favourites&#x27;</span>),
+  selected: filter == <span class="s">&#x27;Favourites&#x27;</span>,
+  onSelected: (_) {
+    setState(() {
+      filter = <span class="s">&#x27;Favourites&#x27;</span>;
+    });
+  },
+)</pre><p><strong>Careful:</strong> with a filter on, row 0 on the screen is not item 0 of your real list. To change or delete, use the item itself (<code>contacts.remove(contact)</code>), never the row's index.</p></div><div class="box idea"><span class="box-title">🧠 Undo</span><p>To put something back exactly where it was, remember its position <em>before</em> removing it. A <code>SnackBar</code> can carry one button, called an action.</p><pre class="dart"><span class="k">void</span> deleteContact(<span class="t">Contact</span> contact) {
+  <span class="k">final</span> position = contacts.indexOf(contact);
+  setState(() {
+    contacts.remove(contact);
+  });
+  <span class="t">ScaffoldMessenger</span>.of(context).showSnackBar(
+    <span class="t">SnackBar</span>(
+      content: <span class="t">Text</span>(<span class="s">&#x27;${contact.name} deleted&#x27;</span>),
+      action: <span class="t">SnackBarAction</span>(
+        label: <span class="s">&#x27;Undo&#x27;</span>,
+        onPressed: () {
+          setState(() {
+            contacts.insert(position, contact);
+          });
+        },
+      ),
+    ),
+  );
+}</pre></div><div class="box idea"><span class="box-title">🧠 A second screen</span><p>A new screen is just another widget class. <code>Navigator.push</code> opens it on top, and <code>Navigator.pop(context)</code> goes back (so does the back arrow Flutter adds). The data goes in through the constructor, with <code>required</code>, like <code>HomeScreen(title: ...)</code>. <code>initState</code> runs once when the screen opens: use it to fill the fields. <code>.then</code> runs when the user comes back, so the first screen can redraw with the changes.</p><p>Opening it:</p><pre class="dart"><span class="t">Navigator</span>.push(
+  context,
+  <span class="t">MaterialPageRoute</span>(builder: (context) =&gt; <span class="t">ContactScreen</span>(contact: contact)),
+).then((_) {
+  setState(() {});
+});</pre><p>The screen itself:</p><pre class="dart"><span class="k">class</span> <span class="t">ContactScreen</span> <span class="k">extends</span> <span class="t">StatefulWidget</span> {
+  <span class="k">const</span> <span class="t">ContactScreen</span>({<span class="k">super</span>.key, <span class="k">required</span> <span class="k">this</span>.contact});
+
+  <span class="k">final</span> <span class="t">Contact</span> contact;
+
+  @override
+  <span class="t">State</span>&lt;<span class="t">ContactScreen</span>&gt; createState() =&gt; _ContactScreenState();
+}
+
+<span class="k">class</span> _ContactScreenState <span class="k">extends</span> <span class="t">State</span>&lt;<span class="t">ContactScreen</span>&gt; {
+  <span class="k">final</span> nameController = <span class="t">TextEditingController</span>();
+
+  @override
+  <span class="k">void</span> initState() {
+    <span class="k">super</span>.initState();
+    nameController.text = widget.contact.name;
+  }
+
+  @override
+  <span class="t">Widget</span> build(<span class="t">BuildContext</span> context) {
+    <span class="k">return</span> <span class="t">Scaffold</span>(
+      appBar: <span class="t">AppBar</span>(title: <span class="k">const</span> <span class="t">Text</span>(<span class="s">&#x27;Contact&#x27;</span>)),
+      body: <span class="t">Column</span>(
+        children: [
+          <span class="t">TextField</span>(controller: nameController),
+          <span class="t">FilledButton</span>(
+            onPressed: () {
+              widget.contact.name = nameController.text.trim();
+              <span class="t">Navigator</span>.pop(context);
+            },
+            child: <span class="k">const</span> <span class="t">Text</span>(<span class="s">&#x27;Save&#x27;</span>),
+          ),
+        ],
+      ),
+    );
+  }
+}</pre><p>The contact's <code>name</code> is changed here, so in the model it cannot be <code>final</code>. And when you change your model, do a hot restart, as in step 8.</p></div><div class="box idea"><span class="box-title">🧠 Coming back with an answer</span><p>An "add" screen usually sends the new thing back to the screen that opened it. <code>Navigator.pop</code> can carry a value, and <code>.then</code> receives it. If the user pressed the back arrow instead, the value is <code>null</code>.</p><pre class="dart"><span class="t">Navigator</span>.push(
+  context,
+  <span class="t">MaterialPageRoute</span>(builder: (context) =&gt; <span class="k">const</span> <span class="t">NoteScreen</span>()),
+).then((result) {
+  <span class="k">if</span> (result != <span class="k">null</span>) {
+    setState(() {
+      notes.add(result);
+    });
+  }
+});</pre><p>And on the second screen, when the user taps Save:</p><pre class="dart"><span class="t">Navigator</span>.pop(context, <span class="s">&#x27;Buy stamps&#x27;</span>);</pre></div><div class="box idea"><span class="box-title">🧠 Reading a number safely</span><p><code>int.parse</code> crashes on <code>5k</code>. <code>int.tryParse</code> gives <code>null</code> instead, so you can refuse it with a message. It still accepts <code>-3</code>, so check the number is above zero too.</p><pre class="dart"><span class="k">final</span> amount = <span class="k">int</span>.tryParse(amountController.text.trim());
+<span class="c">// &#x27;5000&#x27; gives 5000   &#x27;5k&#x27; gives null   &#x27;-3&#x27; gives -3</span></pre></div><div class="box idea"><span class="box-title">🧠 Are you sure?</span><p>Before something that cannot be undone, ask. <code>showDialog</code> opens a box over the page; <code>Navigator.pop(context)</code> closes it.</p><pre class="dart">showDialog(
+  context: context,
+  builder: (context) {
+    <span class="k">return</span> <span class="t">AlertDialog</span>(
+      title: <span class="k">const</span> <span class="t">Text</span>(<span class="s">&#x27;Delete everything?&#x27;</span>),
+      actions: [
+        <span class="t">TextButton</span>(
+          onPressed: () =&gt; <span class="t">Navigator</span>.pop(context),
+          child: <span class="k">const</span> <span class="t">Text</span>(<span class="s">&#x27;Cancel&#x27;</span>),
+        ),
+        <span class="t">FilledButton</span>(
+          onPressed: () {
+            setState(() {
+              notes.clear();
+            });
+            <span class="t">Navigator</span>.pop(context);
+          },
+          child: <span class="k">const</span> <span class="t">Text</span>(<span class="s">&#x27;Delete&#x27;</span>),
+        ),
+      ],
+    );
+  },
+);</pre></div><div class="box idea"><span class="box-title">🧠 A grid</span><p>Like <code>ListView.builder</code>, but in rows of several boxes. <code>crossAxisCount</code> is how many per row.</p><pre class="dart"><span class="t">Expanded</span>(
+  child: <span class="t">GridView</span>.builder(
+    gridDelegate: <span class="k">const</span> <span class="t">SliverGridDelegateWithFixedCrossAxisCount</span>(
+      crossAxisCount: <span class="n">4</span>,
+    ),
+    itemCount: tiles.length,
+    itemBuilder: (context, index) {
+      <span class="k">return</span> <span class="t">Card</span>(child: <span class="t">Center</span>(child: <span class="t">Text</span>(tiles[index])));
+    },
+  ),
+)</pre></div><div class="box idea"><span class="box-title">🧠 A yes / no switch</span><p>A row with a label and an on/off switch. Keep its value in your State.</p><pre class="dart"><span class="t">SwitchListTile</span>(
+  title: <span class="k">const</span> <span class="t">Text</span>(<span class="s">&#x27;Urgent&#x27;</span>),
+  value: urgent,
+  onChanged: (value) {
+    setState(() {
+      urgent = value;
+    });
+  },
+)</pre></div><div class="box idea"><span class="box-title">🧠 Bars and styled boxes</span><p><code>LinearProgressIndicator</code> draws a bar filled from 0.0 (empty) to 1.0 (full): perfect for percentages. <code>Container</code> with a <code>BoxDecoration</code> gives any box a colour and rounded corners.</p><pre class="dart"><span class="k">const</span> <span class="t">LinearProgressIndicator</span>(value: <span class="n">0.44</span>, minHeight: <span class="n">12</span>)</pre><pre class="dart"><span class="t">Container</span>(
+  padding: <span class="k">const</span> <span class="t">EdgeInsets</span>.all(<span class="n">16</span>),
+  decoration: <span class="t">BoxDecoration</span>(
+    color: <span class="t">Colors</span>.green,
+    borderRadius: <span class="t">BorderRadius</span>.circular(<span class="n">16</span>),
+  ),
+  child: <span class="k">const</span> <span class="t">Text</span>(
+    <span class="s">&#x27;Balance: 10,000 RWF&#x27;</span>,
+    style: <span class="t">TextStyle</span>(color: <span class="t">Colors</span>.white, fontSize: <span class="n">22</span>),
+  ),
+)</pre></div></section><section class="chapter" id="all"><h2 class="chap"><span class="num">3</span> Requirements for every project</h2><ol class="req"><li><strong>At least two screens</strong>, with data going from one to the other (for example a list screen and an add or details screen).</li><li><strong>A model class</strong> for your main data, with sample data so the app is never empty on its first run.</li><li><strong>The rules live in functions</strong>, outside <code>build</code>.</li><li><strong>Every input is checked.</strong> Wrong input is refused with a clear message, and nothing changes.</li><li><strong>The screen always shows the current data.</strong> Every change appears straight away, on every screen.</li><li><strong>A way to fix mistakes</strong>: undo, edit or delete, whichever fits your app.</li><li><strong>No blank screens.</strong> When there is nothing to show, say so.</li><li><strong>Your own design</strong>: an app name, a theme colour, icons. Not a copy of the Shopping List.</li></ol><div class="box plain"><span class="box-title">Your repository</span><ul><li>A new GitHub repository for this app, with small commits as you build.</li><li>A README with: the app name, which project you chose, a list of features, at least four screenshots, and your answers to your project's Think questions.</li></ul></div></section><section class="chapter" id="momo"><h2 class="chap"><span class="num">4</span> MoMo Wallet</h2><p><span class="tag">BUILT ON LABS 3 · 2 · 6</span></p><p class="step-lead">A wallet like the one on every phone in Rwanda: money comes in, you send money to friends, you cash out at an agent. And the balance must never lie.</p><h3>Screens</h3><div class="screens"><div><strong>Wallet</strong>The balance in a big card, the statistics, and every transaction, newest first, with a filter.</div><div><strong>Send money</strong>A phone number and an amount.</div><div><strong>Cash out</strong>An amount, then the exact notes the agent will hand you, then Confirm.</div></div><h3>Requirements</h3><ol class="req"><li>The wallet starts at <strong>10,000 RWF</strong> with a few sample transactions.</li><li>Each transaction shows its description, its amount, and whether it is IN (green) or OUT (red), newest first. A filter shows <strong>All</strong>, <strong>IN</strong> or <strong>OUT</strong>.</li><li><strong>Receiving money</strong> adds an IN with a description. The amount must be a whole number above 0, and the description cannot be empty.</li><li><strong>Sending money (Lab 2):</strong> the phone number must be exactly 10 digits and start with <code>078</code> or <code>079</code>, and the amount must be at least 100 RWF. A refusal says which rule failed. A successful send becomes an OUT: <strong>Sent to 0788123456</strong>.</li><li><strong>Cashing out (Lab 6):</strong> the agent has notes of 5,000, 2,000, 1,000, 500 and 100 RWF, so the amount must be a multiple of 100. Before confirming, the screen shows exactly which notes you will get, biggest first. Confirm adds an OUT: <strong>Cash out</strong>.</li><li>Any OUT bigger than the current balance is refused: <strong>Insufficient balance</strong>.</li><li><strong>Statistics (Lab 3):</strong> total IN, total OUT, and the lowest balance ever reached.</li><li>A transaction can be deleted, with Undo, and everything is recalculated. But if deleting it would make the balance go below 0 at any point in the history, the delete is refused.</li></ol><div class="box check"><span class="box-title">✔ Your app is done when</span><ul><li>Sending to <code>0721234567</code> is refused (not 078 or 079), and so is sending 50 RWF to <code>0788123456</code>.</li><li>Cashing out 23,700 RWF shows 5,000 × 4 · 2,000 × 1 · 1,000 × 1 · 500 × 1 · 100 × 2. Cashing out 250 RWF is refused.</li><li>An OUT of 1,000,000 RWF is refused, and so are <code>5k</code>, <code>0</code> and <code>-200</code>.</li><li>The totals and the lowest balance are right after several transactions, and after a delete.</li></ul></div><div class="box think"><span class="box-title">🤔 Think (answer in your README)</span><ol class="think"><li>Why must every check happen before any money moves? What would go wrong if one check came after?</li><li>Your lowest-balance statistic needs a starting value. What did you start it at, and why not 0?</li></ol></div><div class="box push"><span class="box-title">⚡ Push further</span><ul><li>A 100 RWF fee on every send, shown as its own OUT.</li><li>A transaction details screen.</li></ul></div></section><section class="chapter" id="vote"><h2 class="chap"><span class="num">5</span> Class Election</h2><p><span class="tag">BUILT ON LABS 8 · 4 · 9</span></p><p class="step-lead">The class elects its representative. Names arrive messy, every vote must count exactly once, the results must be ranked, and a tie must never become a fake winner.</p><h3>Screens</h3><div class="screens"><div><strong>Vote</strong>The voter types their name, then taps Vote on one candidate card. The number of votes so far is shown.</div><div><strong>Results</strong>Every candidate ranked, with their votes, percentage and a bar, and a banner: the winner, or the tie.</div><div><strong>Candidates</strong>Add a candidate, or remove one who has no votes yet.</div></div><h3>Requirements</h3><ol class="req"><li>Three sample candidates to start.</li><li><strong>Every name is cleaned before it is used (Lab 4)</strong>, for voters and candidates: spaces removed at both ends, extra spaces between words removed, and written in Title Case. <code>&nbsp;&nbsp;keza&nbsp;&nbsp;uwase&nbsp;</code> becomes <strong>Keza Uwase</strong>.</li><li>A vote needs a voter name, and each voter votes <strong>only once</strong>. After cleaning, <em>aline</em> and <em>&nbsp;ALINE</em> are the same voter: <strong>Aline has already voted</strong>.</li><li>Results show each candidate's votes and percentage of all votes, with one decimal (<em>44.4%</em>), and a bar of the same size.</li><li><strong>Results are ranked (Lab 9)</strong>, highest first. Whichever way you sort, you must be able to explain how it works.</li><li><strong>The banner (Lab 8)</strong> says <strong>Winner: Keza</strong>, or, when the top score is shared, <strong>Tie between Keza and Mutoni (4 votes each)</strong>.</li><li>Before any vote, the results say <strong>No votes yet</strong>: never <em>NaN%</em>.</li><li>A new candidate cannot be empty or a duplicate (after cleaning). A candidate with votes cannot be removed. A <strong>Reset</strong> button clears all votes, after an <em>Are you sure?</em> dialog.</li></ol><div class="box check"><span class="box-title">✔ Your app is done when</span><ul><li><code>&nbsp;aLINE&nbsp;</code> can vote once, and then <code>Aline</code> is refused.</li><li>With 4, 4 and 1 votes, the results show 44.4%, 44.4%, 11.1% and a tie banner, highest first.</li><li>Adding the candidate <code>&nbsp;keza&nbsp;</code> when Keza exists is refused. After a reset, the results say No votes yet.</li></ul></div><div class="box think"><span class="box-title">🤔 Think (answer in your README)</span><ol class="think"><li>Why must names be cleaned <em>before</em> they are compared? Give an example of what goes wrong otherwise.</li><li>How does your app decide between a winner and a tie? Explain it in plain words.</li></ol></div><div class="box push"><span class="box-title">⚡ Push further</span><ul><li>Undo the last vote.</li><li>A turnout figure: votes cast out of the number of students in the class, which you type in.</li></ul></div></section><section class="chapter" id="time"><h2 class="chap"><span class="num">6</span> My Week</h2><p><span class="tag">BUILT ON LABS 7 · 1 · 9</span></p><p class="step-lead">Your week of classes in one app, which keeps everything in order, adds up your hours, and warns you before two courses collide.</p><h3>Screens</h3><div class="screens"><div><strong>Week</strong>Day chips (Mon to Fri), that day's courses in order, the day's hours, and the week's total.</div><div><strong>Add or edit course</strong>Course name, day, start and end time typed as <code>08:00</code>.</div></div><h3>Requirements</h3><ol class="req"><li>Sample courses on at least three days, including at least one clash.</li><li><strong>Times (Lab 1):</strong> typed as <code>HH:MM</code>, turned into minutes to compare and calculate, and back into text to show. <code>8h</code>, <code>25:00</code>, <code>10:75</code> and an end time that is not after the start are all refused with a message.</li><li><strong>Order (Lab 9):</strong> each day's courses are always shown in order of start time, even right after adding or editing one.</li><li><strong>Clashes (Lab 7):</strong> two courses on the same day clash if each starts before the other ends. A course ending at 11:00 and one starting at 11:00 do <strong>not</strong> clash.</li><li>A clashing course is shown in red, with <strong>Clashes with Physics</strong> (or the names of every course it clashes with).</li><li>Each day shows its total class time, like <strong>3h 30m</strong>, and the week's total is shown at the top.</li><li>A day with no courses says <strong>No classes on Wednesday</strong>.</li><li>Tapping a course opens it for editing. A course can be deleted, after an <em>Are you sure?</em> dialog.</li></ol><div class="box check"><span class="box-title">✔ Your app is done when</span><ul><li>A day with 08:00–10:00 and 10:00–11:30 shows 3h 30m, and neither course is red.</li><li>Adding a course that overlaps another turns both red, naming each other. Editing a time to remove the overlap makes the red disappear on both.</li><li>A course added with an early start appears in the right place, not at the bottom.</li></ul></div><div class="box think"><span class="box-title">🤔 Think (answer in your README)</span><ol class="think"><li>Write your clash condition in plain words. Why <code>&lt;</code> and not <code>&lt;=</code>?</li><li>Why is it easier to store times as minutes than as text like <code>08:30</code>?</li></ol></div><div class="box push"><span class="box-title">⚡ Push further</span><ul><li>The free time between classes: <strong>Free: 12:00–14:00</strong>.</li><li>A week view listing every clash of the week.</li></ul></div></section><section class="chapter" id="battery"><h2 class="chap"><span class="num">7</span> Battery Planner</h2><p><span class="tag">BUILT ON LABS 11 · 1 · 9</span></p><p class="step-lead">Will your phone survive today? Plan your day hour by hour, see the exact moment the battery dies, and find the smallest charging plan that saves it.</p><h3>Screens</h3><div class="screens"><div><strong>Day</strong>Every hour from 7:00 to 23:00: its activity, whether it charges, and the battery after that hour as a number and a bar. A banner on top.</div><div><strong>Edit hour</strong>Choose the activity, and switch charging on or off.</div><div><strong>Report</strong>The drain of each activity over the whole day, ranked.</div></div><h3>Requirements</h3><ol class="req"><li>The day runs from <strong>7:00 to 23:00</strong>, starting at <strong>100%</strong>, filled with Lab 11's sample day.</li><li><strong>The rules (Lab 11):</strong> each hour drains video 12%, games 15%, chat 5%, music 6%, idle 2%. A charging hour adds 20%. Every hour: subtract the drain, add 20 if it charges, then keep the battery between 0 and 100.</li><li>Each hour shows its activity, a charging icon if it charges, and the battery after that hour as a number and a bar. The bar turns red under 20%.</li><li>The banner says <strong>☠ Dies at 17:00</strong> (the first hour that ends at 0%) or <strong>Survives with 2% left</strong>. Hours after the death are shown as dead, never with a battery value.</li><li>Tapping an hour opens its edit screen. Saving updates every hour, the bars and the banner straight away.</li><li><strong>The report (Lab 9):</strong> the total drain of each activity over the whole day, ranked highest first, with the hungriest activity named.</li><li><strong>Find a charging plan:</strong> a button that works out the fewest charging hours that let the phone survive, and which ones. The user can then apply that plan with one tap.</li><li>A <strong>Reset</strong> button, after an <em>Are you sure?</em> dialog, brings back the sample day with no charging.</li></ol><div class="box check"><span class="box-title">✔ Your app is done when</span><ul><li>The sample day with no charging dies at 17:00.</li><li>Charging at 8:00, 11:00 and 12:00 survives with 2% left. Charging at 7:00, 8:00 and 9:00 dies at 20:00.</li><li>Find a charging plan answers 3 hours. The report ranks video (72%), games (60%), chat (20%), idle (6%).</li></ul></div><div class="box think"><span class="box-title">🤔 Think (answer in your README)</span><ol class="think"><li>Does <em>when</em> you charge matter, or only how much? Use your two plans above to explain.</li><li>Why must the battery be kept between 0 and 100 every hour, and not just at the end?</li></ol></div><div class="box push"><span class="box-title">⚡ Push further</span><ul><li>Let the user change the starting battery and the start hour.</li><li>Add a new activity with its own drain.</li></ul></div></section><section class="chapter" id="bus"><h2 class="chap"><span class="num">8</span> Bus Booking</h2><p><span class="tag">BUILT ON WEEKEND ASSIGNMENT · LABS 10 · 6</span></p><p class="step-lead">Your weekend Bus Dispatcher, with a screen: the seat map a passenger sees when booking a ticket to Huye, paying cash, and waiting for a seat when the bus is full.</p><h3>Screens</h3><div class="screens"><div><strong>Seat map</strong>The route and price, a grid of 12 seats (free or taken), the seats sold and the money made.</div><div><strong>Book a seat</strong>Opens from a free seat: the passenger's name and the cash they hand over, then their change.</div><div><strong>Booking details</strong>Opens from a taken seat: who sits there, and Cancel booking.</div><div><strong>Waitlist</strong>The people waiting for a seat, in order, priority passengers marked.</div></div><h3>Requirements</h3><ol class="req"><li>One bus: <strong>Huye, 3,000 RWF, 12 seats</strong>, shown as a grid. Free and taken seats look clearly different. A few sample bookings to start.</li><li>Tapping a free seat opens the booking screen. The name cannot be empty, and the same passenger cannot hold two seats.</li><li><strong>Paying cash (Lab 6):</strong> the passenger types the cash they hand over. It must be at least 3,000 RWF and a multiple of 100. The screen shows the change in notes, biggest first.</li><li>Tapping a taken seat opens its booking details, where the booking can be cancelled after an <em>Are you sure?</em> dialog.</li><li>The seat map shows <strong>seats sold</strong> and <strong>money made</strong> (seats sold × price), always up to date.</li><li>When the bus is full, a passenger can <strong>join the waitlist</strong>, with a <strong>Priority</strong> switch (elderly, pregnant, disabled).</li><li><strong>Priority (Lab 10):</strong> a priority passenger goes ahead of every ordinary passenger on the waitlist, but behind priority passengers who joined earlier.</li><li>When a booking is cancelled and someone is waiting, the first person on the waitlist moves into the free seat automatically, with a message: <strong>Frank moved into seat 4</strong>. An empty waitlist says <strong>Nobody is waiting</strong>.</li></ol><div class="box check"><span class="box-title">✔ Your app is done when</span><ul><li>Booking all 12 seats shows 12 sold and 36,000 RWF.</li><li>Paying 10,000 RWF shows change of 5,000 × 1 · 2,000 × 1. Paying 2,500 or 3,050 RWF is refused.</li><li>A priority passenger who joins after two ordinary passengers is first on the waitlist, and moves into the next cancelled seat.</li><li>A taken seat can never be booked a second time.</li></ul></div><div class="box think"><span class="box-title">🤔 Think (answer in your README)</span><ol class="think"><li>Where exactly does a new priority passenger go on the waitlist, and how did your code find that position?</li><li>Why should moving someone from the waitlist happen inside the cancel function, and not when the screen is drawn?</li></ol></div><div class="box push"><span class="box-title">⚡ Push further</span><ul><li>A group booking: several passengers in seats next to each other, all or none (like the weekend assignment).</li><li>A second route, Musanze, with its own grid.</li></ul></div></section><section class="chapter" id="own"><h2 class="chap"><span class="num">9</span> Your own app</h2><p><span class="tag">BUILT ON LAB 12 · THE BRAIN OF YOUR APP</span></p><p class="step-lead">In Lab 12 you designed the brain of your own app: its data, its commands and its rules. Now give it a body. This is the best start for your final project.</p><h3>Screens</h3><div class="screens"><div><strong>Your choice</strong>At least two screens. What they are depends on your app: a list and a details screen, a form and a summary, a dashboard and a history.</div></div><h3>Requirements</h3><ol class="req"><li>Start from your Lab 12 design: the same data, the same commands and the same rules. You may improve them.</li><li>Your README starts with your Lab 12 comment block: the app's name, the problem it solves, its commands, and what data each changes.</li><li><strong>Every command from Lab 12 becomes something on screen</strong>: a button, a form or a tap. Nobody types commands any more.</li><li>Every rule that refused a command in Lab 12 now refuses the action on screen, with a clear message.</li><li>Your Lab 12 scenario (your 8 or more commands) can be played on screen, one action at a time, and ends with the same results as your Lab 12 output.</li><li>At least two of: a filter, a search, undo, an <em>Are you sure?</em> dialog, a grid, bars.</li><li>Your app is big enough for two screens. If your Lab 12 idea is too small, extend it, or choose another project.</li></ol><div class="box check"><span class="box-title">✔ Your app is done when</span><ul><li>Your README shows your Lab 12 design, and every command can be done on screen.</li><li>Your Lab 12 scenario, played on screen, ends with the same data as your Lab 12 output.</li><li>Every refused action shows a message, and nothing changes.</li></ul></div><div class="box think"><span class="box-title">🤔 Think (answer in your README)</span><ol class="think"><li>Which Lab 12 command was the hardest to turn into a screen, and why?</li><li>What did you change in your Lab 12 logic once it had a screen, and why?</li></ol></div><div class="box push"><span class="box-title">⚡ Push further</span><ul><li>Sketch the next version of your app in Figma: it may become your final project.</li></ul></div></section><section class="chapter" id="submit"><h2 class="chap"><span class="num hw">10</span> Submit</h2><div class="box plain"><span class="box-title">📤 How to submit</span><ol class="plain"><li>Check every line of your project's <strong>Your app is done when</strong> list, and every requirement for all projects.</li><li>Make sure your README has your app name, your project, your features, at least four screenshots and your Think answers.</li><li>Push, then open your repository in a browser and check that everything shows.</li><li>Submit your repository link in the form your instructor shares.</li></ol></div><p><strong>Type it yourself and understand it.</strong> You must be able to explain any line of your app, and why you built it that way.</p></section>
+</div>
+<footer>Mobile Programming · Week 2 · Mini Project Building</footer>
+</body></html>
